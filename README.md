@@ -1,3 +1,5 @@
-# README #
+# Grimstad Sprit og Shorts #
 
-Rediger denne filen og legg inn navnene til deltakerne
+Kristian Sundhaugen (kristiansundhaugen@gmail.com / krisundh@stud.ntnu.no)
+Martin Pukstad (martin@pukstad.no / martinpu@stud.ntnu.no)
+Stian Fenstad (fenstad91@gmail.com / stianfen@stud.ntnu.no)

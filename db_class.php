@@ -2,6 +2,8 @@
 //require database serverens sin informasjon
 require 'config.php';
 
+$response = array();
+
 class db_class{
 	//database klassens elementer
 	public $host = db_host;
@@ -27,12 +29,13 @@ class db_class{
 		    }
 	}
 	//Funksjon for å opprette bruker i databasen
-	public function save($username, $hash, $firm){
+	public function save($first, $last, $email, $hash){
 		try {
-			$stmt = $this->conn->prepare("INSERT INTO user (username, password, firm) VALUES(:username, :password, :firm)") or die($this->conn->error);
-			$stmt->bindParam(':username', $username);
-			$stmt->bindParam(':password', $hash);
-			$stmt->bindParam(':firm', $firm);
+			$stmt = $this->conn->prepare("INSERT INTO user (firstname, lastname, email, password) VALUES(:firstname, :lastname, :email, :password)") or die($this->conn->error);
+			$stmt->bindParam(':firstname', $first);
+			$stmt->bindParam(':lastname', $last);
+			$stmt->bindParam(':email', $email);
+			$stmt->bindParam(':password', $hash);			
 
 			$stmt->execute();
 		}
@@ -42,16 +45,16 @@ class db_class{
 		$conn = null;
 	}
 	//Funksjon for å logge inn en bruker
-	public function login($username, $password){
+	public function login($email, $password){
 		// Henter alt om brukeren
 		try {
-			$sql = "SELECT * FROM user WHERE username = :username";
+			$sql = "SELECT * FROM user WHERE email = :email";
 			$stmt = $this->conn->prepare($sql);
-			$stmt->execute(array(":username" => $username));
+			$stmt->execute(array(":email" => $email));
 			if($user = $stmt->fetch(PDO::FETCH_ASSOC)){
 				if (password_verify($password, $user['password'])) {
 					session_start();
-					$_SESSION['user_id'] = $user['user_id']; // lagrer brukerens id i session
+					$_SESSION['bid'] = $user['bid']; // lagrer brukerens id i session
 					echo '<script>alert("Successfully login!")</script>';
 					echo '<script>window.location = "home.php"</script>'; 
 				} else {
@@ -67,6 +70,21 @@ class db_class{
 	    	echo "Error: " . $e->getMessage();
 	    }
 
+	}
+	// Funksjon for å sjekke om bruker er logget inn.
+	public function is_loggedIn() {
+		if(isset($_SESSION['bid'])) {
+			$response['logged_in'] = false
+		} else {
+			$response['logged_in'] = true
+		}
+		return json_encode($response);
+	}
+	// Funksjon for å logge ut bruker.
+	public function logout() {
+		session_destroy();
+		unset($_SESSION['bid']);
+		return true;
 	}
 }
 

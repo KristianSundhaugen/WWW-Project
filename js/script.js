@@ -1,7 +1,7 @@
 // This script implements simple routing by loading partial HTML files 
 // named corresponding to fragment identifiers.
 //
-// By Curran Kelleher October 2014
+
 
 // Wrap everything in an immediately invoked function expression,
 // so no global variables are introduced.
@@ -24,7 +24,7 @@
 
     } else {
       // If the page has not been fetched before, fetch it.
-      $.get(fragmentId + ".html", function (content) {
+      $.get("html/" + fragmentId + ".html", function (content) {
       
         // Store the fetched content in the cache.
         partialsCache[fragmentId] = content;
@@ -35,12 +35,18 @@
     }
   }
 
+  // Get the appropriate header for the given fragment identifier.
+  // This function implements a simple cache.
   function getHeader(fragmentId, callback) {
   	 $.get("headers/" + fragmentId + "_header.html", function (header) {
 
-  	 	$('.sidebar').load("sidebar/sidebar.html");
-  	 	partialsCache[fragmentId] = header;
-  	 	callback(header);
+  		// If the user is a non_member, he will not be able to use the sidebar.
+  	 	if(fragmentId == "non_member") { 
+  	 		callback(header);
+  		} else {
+	  	 	$('.sidebar').load("sidebar/sidebar.html");
+	  	 	callback(header);
+	  	 }
   	 });
   }
 
@@ -69,8 +75,8 @@
       $("#content").html(content);
     });
 
-     getHeader(fragmentId, function (header) {
-      $("#header").html(header);
+    getHeader(fragmentId, function (header) {
+     $("#header").html(header);
     });
   
     // Toggle the "active" class on the link currently navigated to.
@@ -91,8 +97,19 @@
 
   // Navigate whenever the fragment identifier value changes.
   $(window).bind('hashchange', navigate);
-}());
 
+  $("#form-signin").submit(function(e) {
+        $.post("<?=$_SERVER['PHP_SELF'];?>", { email: $('#email').val(), password: $('#password').val(), ajax: true }).done(function(data) {
+            if (data.logged_in == true) {
+                // Redirect with javascript
+            } else {
+                // Inject errors to html
+                // data.errors
+            }
+        }); 
+        return false;
+    });
+}());
 
 
 

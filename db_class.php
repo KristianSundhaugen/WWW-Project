@@ -56,14 +56,14 @@ class db_class{
 					session_start();
 					$_SESSION['bid'] = $user['bid']; // lagrer brukerens id i session
 					echo '<script>alert("Successfully login!")</script>';
-					echo '<script>window.location = "home.php"</script>'; 
+					echo '<script>window.location = "#member"</script>'; 
 				} else {
 					echo '<script>alert("Invalid username or password")</script>';
-					echo '<script>window.location = "login.php"</script>';
+					echo '<script>window.location = "#login"</script>';
 				}
 			} else {
 				echo '<script>alert("Invalid username or password")</script>';
-				echo '<script>window.location = "login.php"</script>';
+				echo '<script>window.location = "#login"</script>';
 			}
 		}
 		catch(PDOException $e){
@@ -72,20 +72,17 @@ class db_class{
 
 	}
 	// Funksjon for å sjekke om bruker er logget inn.
-	public function is_loggedIn() {
-		if(isset($_SESSION['bid'])) {
-			$response['logged_in'] = false
-		} else {
-			$response['logged_in'] = true
-		}
-		return json_encode($response);
+	 public function is_loggedIn() {
+		if(isset($_SESSION['bid'])) 
+		return true;
 	}
-	// Funksjon for å logge ut bruker.
+	/*// Funksjon for å logge ut bruker.
 	public function logout() {
 		session_destroy();
 		unset($_SESSION['bid']);
 		return true;
 	}
+	*/
 }
 
 ?>

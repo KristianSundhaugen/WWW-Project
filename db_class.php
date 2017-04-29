@@ -31,7 +31,7 @@ class db_class{
 	//Funksjon for å opprette bruker i databasen
 	public function save($first, $last, $email, $hash){
 		try {
-
+			
 			if(empty($email)){
 				$status = "error";
 				$message = "You did not enter an email address!";
@@ -83,16 +83,18 @@ class db_class{
 			$stmt = $this->conn->prepare($sql);
 			$stmt->execute(array(":email" => $email));
 			if($user = $stmt->fetch(PDO::FETCH_ASSOC)){
-				if (password_verify($password, $user['password'])) {
+				if (password_verify($password, $user['pwd'])) {
 					session_start();
-					$_SESSION['bid'] = $user['bid']; // lagrer brukerens id i session
+					$_SESSION['bid'] = $user['bid']; // lagrer brukerens id i session					
 					echo '<script>alert("Successfully login!")</script>';
 					echo '<script>window.location = "#member"</script>'; 
 				} else {
+					echo "FERR FAAN";
 					echo '<script>alert("Invalid username or password")</script>';
 					echo '<script>window.location = "#login"</script>';
 				}
 			} else {
+				echo "SVARTE FAAN!";
 				echo '<script>alert("Invalid username or password")</script>';
 				echo '<script>window.location = "#login"</script>';
 			}

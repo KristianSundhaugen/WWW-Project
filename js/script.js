@@ -12,6 +12,7 @@
   // Values are the text content of each loaded partial HTML file.
   var partialsCache = {}
 
+
   // Gets the appropriate content for the given fragment identifier.
   // This function implements a simple cache.
   function getContent(fragmentId, callback){
@@ -27,7 +28,7 @@
       $.get("html/" + fragmentId + ".html", function (content) {
       
         // Store the fetched content in the cache.
-        partialsCache[fragmentId] = content;
+        // partialsCache[fragmentId] = content;
 
         // Pass the newly fetched content to the callback.
         callback(content);

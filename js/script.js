@@ -98,17 +98,6 @@
   // Navigate whenever the fragment identifier value changes.
   $(window).bind('hashchange', navigate);
 
-  $("#form-signin").submit(function(e) {
-        $.post("<?=$_SERVER['PHP_SELF'];?>", { email: $('#email').val(), password: $('#password').val(), ajax: true }).done(function(data) {
-            if (data.logged_in == true) {
-                // Redirect with javascript
-            } else {
-                // Inject errors to html
-                // data.errors
-            }
-        }); 
-        return false;
-    });
 }());
 
 

@@ -31,24 +31,55 @@ class db_class{
 	//Funksjon for å opprette bruker i databasen
 	public function save($first, $last, $email, $hash){
 		try {
-			$stmt = $this->conn->prepare("INSERT INTO user (firstname, lastname, email, password) VALUES(:firstname, :lastname, :email, :password)") or die($this->conn->error);
-			$stmt->bindParam(':firstname', $first);
-			$stmt->bindParam(':lastname', $last);
-			$stmt->bindParam(':email', $email);
-			$stmt->bindParam(':password', $hash);			
 
-			$stmt->execute();
+			if(empty($email)){
+				$status = "error";
+				$message = "You did not enter an email address!";
+			}
+			else if(!filter_var($email, FILTER_VALIDATE_EMAIL){
+				$status = "error";
+				$message = "You did have entered an invalid email address!";
+			}
+			else {
+				$existingEmail = $this->conn->prepare("SELECT * FROM users WHERE email = :email")
+				$count = $existingEmail->rowCount();
+				if($count < 1){
+
+					$stmt = $this->conn->prepare("INSERT INTO users (firstname, lastname, email, pwd) VALUES(:firstname, :lastname, :email, :password)") or die($this->conn->error);
+					$stmt->bindParam(':firstname', $first);
+					$stmt->bindParam(':lastname', $last);
+					$stmt->bindParam(':email', $email);
+					$stmt->bindParam(':password', $hash);
+					$stmt->execute();
+
+					$status = "sucess";
+					$message = "You have been signed up!";
+				}
+				else {
+					$status = "error";
+            		$message = "This email address has already been registered!";
+				}
+			}
+
+			//data for å returnere json respons
+			$data = array(
+				'status' => $status,
+				'message' => $message
+			);
 		}
 		catch(PDOException $e){
 	    	echo "Error: " . $e->getMessage();
 	    }
 		$conn = null;
+
+		return $data;
+	 
 	}
 	//Funksjon for å logge inn en bruker
 	public function login($email, $password){
 		// Henter alt om brukeren
 		try {
-			$sql = "SELECT * FROM user WHERE email = :email";
+			$sql = "SELECT * FROM users WHERE email = :email";
 			$stmt = $this->conn->prepare($sql);
 			$stmt->execute(array(":email" => $email));
 			if($user = $stmt->fetch(PDO::FETCH_ASSOC)){
@@ -83,6 +114,19 @@ class db_class{
 		return true;
 	}
 	*/
+	public function userExists($email) {
+
+		$sql = "SELECT * FROM users WHERE email = :email";
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute(array(":email" => $email));
+		echo "hello ur in userexists";
+		if($stmt->fetch(PDO::FETCH_ASSOC)){
+			//brukeren finnes
+			return 1;
+		}else
+			//brukeren finnes ikke
+			return 0;
+	}
 }
 
 ?>

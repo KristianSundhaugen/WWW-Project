@@ -31,7 +31,7 @@ class db_class{
 	//Funksjon for å opprette bruker i databasen
 	public function save($first, $last, $email, $hash){
 		try {
-			$stmt = $this->conn->prepare("INSERT INTO user (firstname, lastname, email, password) VALUES(:firstname, :lastname, :email, :password)") or die($this->conn->error);
+			$stmt = $this->conn->prepare("INSERT INTO users (firstname, lastname, email, password) VALUES(:firstname, :lastname, :email, :password)") or die($this->conn->error);
 			$stmt->bindParam(':firstname', $first);
 			$stmt->bindParam(':lastname', $last);
 			$stmt->bindParam(':email', $email);
@@ -48,20 +48,22 @@ class db_class{
 	public function login($email, $password){
 		// Henter alt om brukeren
 		try {
-			$sql = "SELECT * FROM user WHERE email = :email";
+			$sql = "SELECT * FROM users WHERE email = :email";
 			$stmt = $this->conn->prepare($sql);
 			$stmt->execute(array(":email" => $email));
 			if($user = $stmt->fetch(PDO::FETCH_ASSOC)){
-				if (password_verify($password, $user['password'])) {
+				if (password_verify($password, $user['pwd'])) {
 					session_start();
-					$_SESSION['bid'] = $user['bid']; // lagrer brukerens id i session
+					$_SESSION['bid'] = $user['bid']; // lagrer brukerens id i session					
 					echo '<script>alert("Successfully login!")</script>';
 					echo '<script>window.location = "#member"</script>'; 
 				} else {
+					echo "FERR FAAN";
 					echo '<script>alert("Invalid username or password")</script>';
 					echo '<script>window.location = "#login"</script>';
 				}
 			} else {
+				echo "SVARTE FAAN!";
 				echo '<script>alert("Invalid username or password")</script>';
 				echo '<script>window.location = "#login"</script>';
 			}

@@ -48,29 +48,33 @@ class db_class{
 	public function login($email, $password){
 		// Henter alt om brukeren
 		try {
-			$sql = "SELECT * FROM users WHERE email = :email";
+			$sql = "SELECT * FROM users WHERE email=:email";
 			$stmt = $this->conn->prepare($sql);
 			$stmt->execute(array(":email" => $email));
-			if($user = $stmt->fetch(PDO::FETCH_ASSOC)){
+			 if($user = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			 	echo "1";
 				if (password_verify($password, $user['pwd'])) {
 					session_start();
-					$_SESSION['bid'] = $user['bid']; // lagrer brukerens id i session					
-					echo '<script>alert("Successfully login!")</script>';
-					echo '<script>window.location = "#member"</script>'; 
+					$_SESSION['bid'] = $user['bid']; // lagrer brukerens id i session
+					echo "LoggedIn!";			
+				//	echo '<script>alert("Successfully login!")</script>';
+				//	echo '<script>window.location = "#member"</script>';
+					// header("Location: #member");
 				} else {
-					echo "FERR FAAN";
-					echo '<script>alert("Invalid username or password")</script>';
-					echo '<script>window.location = "#login"</script>';
+					echo "4";
+				//	echo '<script>alert("Invalid username or password")</script>';
+				//	echo '<script>window.location = "#login"</script>';
 				}
 			} else {
-				echo "SVARTE FAAN!";
-				echo '<script>alert("Invalid username or password")</script>';
-				echo '<script>window.location = "#login"</script>';
+				echo "2";
+			//	echo '<script>alert("Invalid username or password")</script>';
+			//	echo '<script>window.location = "#login"</script>';
 			}
 		}
 		catch(PDOException $e){
 	    	echo "Error: " . $e->getMessage();
 	    }
+	    // die(json_encode(array("return" => $return)));
 
 	}
 	// Funksjon for å sjekke om bruker er logget inn.

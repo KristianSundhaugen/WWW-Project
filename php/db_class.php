@@ -29,20 +29,35 @@ class db_class{
 		    }
 	}
 	//Funksjon for å opprette bruker i databasen
-	public function save($first, $last, $email, $hash){
-		try {
-			$stmt = $this->conn->prepare("INSERT INTO users (firstname, lastname, email, password) VALUES(:firstname, :lastname, :email, :password)") or die($this->conn->error);
-			$stmt->bindParam(':firstname', $first);
-			$stmt->bindParam(':lastname', $last);
-			$stmt->bindParam(':email', $email);
-			$stmt->bindParam(':password', $hash);			
+	public function save($firstname, $lastname, $email, $password, $joining_date){
 
-			$stmt->execute();
+		try {
+
+			$stmt = $this->conn->prepare("SELECT * FROM users WHERE email=:email");
+        	$stmt->execute(array(":email"=>$email));
+        	$count = $stmt->rowCount();
+        
+	        if($count==0){
+	            
+	            $stmt = $this->conn->prepare("INSERT INTO users(firstname, lastname, email, pwd, joining_date) VALUES(:firstname, :lastname, :email, :pwd, :jdate)");
+	            $stmt->bindParam(":firstname",$firstname);
+	            $stmt->bindParam(":lastname",$lastname);
+	            $stmt->bindParam(":email",$email);
+	            $stmt->bindParam(":pwd",$password);
+	            $stmt->bindParam(":jdate",$joining_date);
+
+	            if($stmt->execute()) {
+	                echo "registered";
+	            } else {
+	                echo "Query could not execute !";
+	            }
+	        } else{
+	            echo "1"; //  not available
+	        }
 		}
 		catch(PDOException $e){
-	    	echo "Error: " . $e->getMessage();
-	    }
-		$conn = null;
+        	echo $e->getMessage();
+    	}
 	}
 	//Funksjon for å logge inn en bruker
 	public function login($email, $password){
@@ -89,6 +104,19 @@ class db_class{
 		return true;
 	}
 	*/
+	public function userExists($email) {
+
+		$sql = "SELECT * FROM users WHERE email = :email";
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute(array(":email" => $email));
+		echo "hello ur in userexists";
+		if($stmt->fetch(PDO::FETCH_ASSOC)){
+			//brukeren finnes
+			return 1;
+		}else
+			//brukeren finnes ikke
+			return 0;
+	}
 }
 
 ?>

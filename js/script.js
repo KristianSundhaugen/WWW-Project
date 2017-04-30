@@ -6,7 +6,6 @@
 // Wrap everything in an immediately invoked function expression,
 // so no global variables are introduced.
 (function () {
-
   // Stores the cached partial HTML pages.
   // Keys correspond to fragment identifiers.
   // Values are the text content of each loaded partial HTML file.
@@ -14,16 +13,8 @@
 
 
   // Gets the appropriate content for the given fragment identifier.
-  // This function implements a simple cache.
   function getContent(fragmentId, callback){
 
-    // If the page has been fetched before,
-    if(partialsCache[fragmentId]) {
-
-      // pass the previously fetched content to the callback.
-      callback(partialsCache[fragmentId]);
-
-    } else {
       // If the page has not been fetched before, fetch it.
       $.get("html/" + fragmentId + ".html", function (content) {
       
@@ -32,8 +23,7 @@
 
         // Pass the newly fetched content to the callback.
         callback(content);
-      });
-    }
+      });   
   }
 
   // Get the appropriate header for the given fragment identifier.
@@ -42,7 +32,7 @@
   	 $.get("headers/" + fragmentId + "_header.html", function (header) {
 
   		// If the user is a non_member, he will not be able to use the sidebar.
-  	 	if(fragmentId == "non_member") { 
+  	 	if(fragmentId == "non_member" || fragmentId == "login") { 
   	 		callback(header);
   		} else {
 	  	 	$('.sidebar').load("sidebar/sidebar.html");
@@ -70,6 +60,7 @@
     // This gets rid of the "#" character.
     var fragmentId = location.hash.substr(1);
 
+
     // Set the "content" div innerHTML based on the fragment identifier.
     getContent(fragmentId, function (content) {
       $("#content").html(content);
@@ -83,49 +74,103 @@
     setActiveLink(fragmentId);
   }
 
-    
-
   // If no fragment identifier is provided,
   if(!location.hash) {
 
     // default to #home.
-    location.hash = "#non_member";
+  location.hash = "#non_member";
   }
 
   // Navigate once to the initial fragment identifier.
-  navigate();
-
+ // navigate();
+ 
   // Navigate whenever the fragment identifier value changes.
-  $(window).bind('hashchange', navigate);
+  debugger;
+ $(window).bind("hashchange", navigate);
+
+$("document").ready(function()
+// $(".form_submit_btn").click(function()
+{
+
+    /* validation */
+    $("#login_form_id").validate({
+        rules:
+        {         
+            pwd: {
+                required: true,
+                minlength: 5,
+                maxlength: 15
+            },
+            email: {
+                required: true,
+                email: true
+            },
+        },
+        messages:
+        {
+            pwd:{
+                required: "Provide a Password",
+                minlength: "Password Needs To Be Minimum of 5 Characters"
+            },
+            email: "Enter a Valid Email",
+        },
+        submitHandler: loginForm
+    });
+    /* validation */
+  /* form submit */
+    function loginForm()
+    {
+      
+        var data = $("#login_form_id").serialize();
+        $.ajax({
+
+            type : 'POST',
+            url  : 'php/login.php',
+            data : data,
+            beforeSend: function()
+            {
+                $("#error").fadeOut();
+                $("#form_submit_btn").html('<span class="glyphicon glyphicon-transfer"></span> &nbsp; sending ...');
+            },
+            success :  function(data)
+            {
+                if(data=="1"){
+
+                    $("#error").fadeIn(1000, function(){
+
+
+                        $("#error").html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; Sorry email already taken !</div>');
+
+                        $("#form_submit_btn").html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Log in');
+
+                    });
+
+                }
+                else if(data=="LoggedIn!")
+                {
+
+                    $("#form_submit_btn").html('Loggin In');
+                    window.location.href = "#member";
+
+                }
+                else{
+
+                    $("#error").fadeIn(1000, function(){
+
+                        $("#error").html('<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+data+' !</div>');
+
+                        $("#form_submit_btn").html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Log In');
+
+                    });
+
+                }
+            }
+        });
+        return false;
+    }
+    /* form submit */
+
+});
 
 }());
 
-
-
-/* $(document).ready(function(){
-	//Viser rett nettside i forhold til brukerrettigheter
-    $.ajax({
-        url:'db_class.php', "success" : function(response){
-        	alert("ajax call success returns: "+ response);
-            if(response==true){
-            	$('.header').load("headers/teacher_header.html");
-        		// $('.sidebar').load("sidebar/sidebar.html");
-            	
-            }else{
-                $('.header').load("headers/non_member_header.html");
-            }
-        }
-    });
-});
-
-
-$(document).ready(function(){
-	//Henter session for å gi rett hjemmeside til rett bruker
-	var session;
-	$.ajaxSetup({cache: false})
-	$.get('get_session.php', function (sessionSet) {
-    	sessionSet = data;
-    	$("#admin").load("headers/teacher_header.html")
-	});
-});
-*/

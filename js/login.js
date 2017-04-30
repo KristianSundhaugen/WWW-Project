@@ -1,8 +1,9 @@
-
-$('document').ready(function()
+/* sasasasass
+// $('document').ready(function() 
+function getLogin()
 {
 	debugger;
-	  /* validation */
+
     $("#login_form_id").validate({
         rules:
         {         
@@ -26,8 +27,6 @@ $('document').ready(function()
         },
         submitHandler: loginForm
     });
-    /* validation */
-  /* form submit */
     function loginForm()
     {
         var data = $("#login_form_id").serialize();
@@ -80,7 +79,7 @@ $('document').ready(function()
     }
     /* form submit */
 
-});
+// };
 
 
 
@@ -106,3 +105,4 @@ $('document').ready(function()
 	});
 }); 
  */
+

@@ -1,9 +1,6 @@
-/* sasasasass
-// $('document').ready(function() 
-function getLogin()
-{
-	debugger;
-
+ $("document").ready(function()
+  {
+    /* validation */
     $("#login_form_id").validate({
         rules:
         {         
@@ -27,10 +24,11 @@ function getLogin()
         },
         submitHandler: loginForm
     });
+    /* validation */
+  /* form submit */
     function loginForm()
     {
         var data = $("#login_form_id").serialize();
-
         $.ajax({
 
             type : 'POST',
@@ -43,19 +41,19 @@ function getLogin()
             },
             success :  function(data)
             {
-                if(data=="1"){
+                if(data=="Invalid username or password"){
 
                     $("#error").fadeIn(1000, function(){
 
 
-                        $("#error").html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; Sorry email already taken !</div>');
+                        $("#error").html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; echo Invalid username or password !</div>');
 
                         $("#form_submit_btn").html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Log in');
 
                     });
 
                 }
-                else if(data=="LoggedIn!")
+                else if(data=="Logged in")
                 {
 
                     $("#form_submit_btn").html('Loggin In');
@@ -78,31 +76,4 @@ function getLogin()
         return false;
     }
     /* form submit */
-
-// };
-
-
-
-
-
-
-
-
-
-// alert($("#login-form").serialize())
-
-/* $(document).on("click", "#form_submit_btn", function(e) {
-	$.ajax ({
-		type: "post",
-		url: "php/login.php",
-		cache: false,		
-		data: $("#login-form_id").serialize(),
-		success: function (response) {	
-			debugger;					
-			window.location.href="#member";	
-			alert(response);	
-		}		
-	});
-}); 
- */
-
+});

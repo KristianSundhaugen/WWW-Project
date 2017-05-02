@@ -11,7 +11,6 @@
   // Values are the text content of each loaded partial HTML file.
   var partialsCache = {}
 
-
   // Gets the appropriate content for the given fragment identifier.
   function getContent(fragmentId, callback){
 
@@ -80,18 +79,16 @@
     // default to #home.
   location.hash = "#non_member";
   }
-
   // Navigate once to the initial fragment identifier.
- // navigate();
+  navigate();
  
   // Navigate whenever the fragment identifier value changes.
-  debugger;
- $(window).bind("hashchange", navigate);
+  
+  $(window).bind("hashchange", navigate);
 
-$("document").ready(function()
-// $(".form_submit_btn").click(function()
-{
-
+ // Function to validate and run script on input from user, this is for the user to log in.
+  $("document").ready(function()
+  {
     /* validation */
     $("#login_form_id").validate({
         rules:
@@ -120,7 +117,6 @@ $("document").ready(function()
   /* form submit */
     function loginForm()
     {
-      
         var data = $("#login_form_id").serialize();
         $.ajax({
 
@@ -134,19 +130,19 @@ $("document").ready(function()
             },
             success :  function(data)
             {
-                if(data=="1"){
+                if(data=="Invalid username or password"){
 
                     $("#error").fadeIn(1000, function(){
 
 
-                        $("#error").html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; Sorry email already taken !</div>');
+                        $("#error").html('<div class="alert alert-danger"> <span class="glyphicon glyphicon-info-sign"></span> &nbsp; echo Invalid username or password !</div>');
 
                         $("#form_submit_btn").html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Log in');
 
                     });
 
                 }
-                else if(data=="LoggedIn!")
+                else if(data=="Logged in")
                 {
 
                     $("#form_submit_btn").html('Loggin In');
@@ -169,8 +165,32 @@ $("document").ready(function()
         return false;
     }
     /* form submit */
-
 });
 
+
+
+  // We can attach the `fileselect` event to the file inputs on the page
+  $(document).on('change', ':file', function() {
+    var input = $(this),
+        numFiles = input.get(0).files ? input.get(0).files.length : 1,
+        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+    input.trigger('fileselect', [numFiles, label]);
+  });
+
+  // We watch our custom `fileselect` event like this
+  $(document).ready( function() {
+      $(':file').on('fileselect', function(event, numFiles, label) {
+
+          var input = $(this).parents('.input-group').find(':text'),
+              log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+          if( input.length ) {
+              input.val(log);
+          } else {
+              if( log ) alert(log);
+          }
+
+      });
+  });
 }());
 

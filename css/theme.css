@@ -22,7 +22,7 @@
   border-color: black;
 }
 
-/* Style the active page link. */
+/* Style the active page link. */ 
 #navbar a.active{
   border-color: gray;
 }

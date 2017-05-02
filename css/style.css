@@ -47,3 +47,8 @@ body{
 #btn-submit{
     height:45px;
 }
+
+.main {
+    position: absolute;
+    left:260px; top:92px; right:0; bottom:0;
+}

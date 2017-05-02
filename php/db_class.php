@@ -67,21 +67,20 @@ class db_class{
 			$stmt = $this->conn->prepare($sql);
 			$stmt->execute(array(":email" => $email));
 			 if($user = $stmt->fetch(PDO::FETCH_ASSOC)) {
-			 	echo "1";
 				if (password_verify($password, $user['pwd'])) {
 					session_start();
 					$_SESSION['bid'] = $user['bid']; // lagrer brukerens id i session
-					echo "LoggedIn!";			
-				//	echo '<script>alert("Successfully login!")</script>';
+					echo "Logged in";		
+				//  echo '<script>alert("Successfully login!")</script>';
 				//	echo '<script>window.location = "#member"</script>';
 					// header("Location: #member");
 				} else {
-					echo "4";
+					echo "Invalid username or password";				
 				//	echo '<script>alert("Invalid username or password")</script>';
 				//	echo '<script>window.location = "#login"</script>';
 				}
 			} else {
-				echo "2";
+				echo "Invalid username or password";
 			//	echo '<script>alert("Invalid username or password")</script>';
 			//	echo '<script>window.location = "#login"</script>';
 			}
@@ -116,6 +115,12 @@ class db_class{
 		}else
 			//brukeren finnes ikke
 			return 0;
+	}
+
+
+	public function upload() {
+		
+
 	}
 }
 

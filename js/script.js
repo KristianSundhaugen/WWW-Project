@@ -6,24 +6,14 @@
 // Wrap everything in an immediately invoked function expression,
 // so no global variables are introduced.
 (function () {
-
   // Stores the cached partial HTML pages.
   // Keys correspond to fragment identifiers.
   // Values are the text content of each loaded partial HTML file.
   var partialsCache = {}
 
-
   // Gets the appropriate content for the given fragment identifier.
-  // This function implements a simple cache.
   function getContent(fragmentId, callback){
 
-    // If the page has been fetched before,
-    if(partialsCache[fragmentId]) {
-
-      // pass the previously fetched content to the callback.
-      callback(partialsCache[fragmentId]);
-
-    } else {
       // If the page has not been fetched before, fetch it.
       $.get("html/" + fragmentId + ".html", function (content) {
       
@@ -32,8 +22,7 @@
 
         // Pass the newly fetched content to the callback.
         callback(content);
-      });
-    }
+      });   
   }
 
   // Get the appropriate header for the given fragment identifier.
@@ -42,7 +31,7 @@
   	 $.get("headers/" + fragmentId + "_header.html", function (header) {
 
   		// If the user is a non_member, he will not be able to use the sidebar.
-  	 	if(fragmentId == "non_member") { 
+  	 	if(fragmentId == "non_member" || fragmentId == "login") { 
   	 		callback(header);
   		} else {
 	  	 	$('.sidebar').load("sidebar/sidebar.html");
@@ -66,10 +55,10 @@
   
   // Updates dynamic content based on the fragment identifier.
   function navigate(){
-
     // Isolate the fragment identifier using substr.
     // This gets rid of the "#" character.
     var fragmentId = location.hash.substr(1);
+
 
     // Set the "content" div innerHTML based on the fragment identifier.
     getContent(fragmentId, function (content) {
@@ -89,41 +78,37 @@
   if(!location.hash) {
 
     // default to #home.
-    location.hash = "#non_member";
+  location.hash = "#non_member";
   }
-  
   // Navigate once to the initial fragment identifier.
   navigate();
-
+ 
   // Navigate whenever the fragment identifier value changes.
-  $(window).bind('hashchange', navigate);
+  
+  $(window).bind("hashchange", navigate);
 
+  // We can attach the `fileselect` event to the file inputs on the page
+  $(document).on('change', ':file', function() {
+    var input = $(this),
+        numFiles = input.get(0).files ? input.get(0).files.length : 1,
+        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+    input.trigger('fileselect', [numFiles, label]);
+  });
+
+  // We watch our custom `fileselect` event like this
+  $(document).ready( function() {
+      $(':file').on('fileselect', function(event, numFiles, label) {
+
+          var input = $(this).parents('.input-group').find(':text'),
+              log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+          if( input.length ) {
+              input.val(log);
+          } else {
+              if( log ) alert(log);
+          }
+
+      });
+  });
 }());
 
-/* $(document).ready(function(){
-	//Viser rett nettside i forhold til brukerrettigheter
-    $.ajax({
-        url:'db_class.php', "success" : function(response){
-        	alert("ajax call success returns: "+ response);
-            if(response==true){
-            	$('.header').load("headers/teacher_header.html");
-        		// $('.sidebar').load("sidebar/sidebar.html");
-            	
-            }else{
-                $('.header').load("headers/non_member_header.html");
-            }
-        }
-    });
-});
-
-
-$(document).ready(function(){
-	//Henter session for å gi rett hjemmeside til rett bruker
-	var session;
-	$.ajaxSetup({cache: false})
-	$.get('get_session.php', function (sessionSet) {
-    	sessionSet = data;
-    	$("#admin").load("headers/teacher_header.html")
-	});
-});
-*/

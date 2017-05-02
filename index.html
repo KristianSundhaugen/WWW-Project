@@ -22,7 +22,35 @@
   <link href="css/style.css" rel="stylesheet" type="text/css" media="screen">
   
   <!-- The CSS theme for the site. -->
-	<div id="header"></div>
+	<!-- <div id="header"></div> -->
+  <header>
+    <nav>
+      <nav class="navbar navbar-inverse" id = non_member>
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#non_member">Grimstad Sprit og Shorts</a>
+          </div>
+            <ul class="nav navbar-nav">
+             <li class="active"><a href="#non_member">Home</a></li> 
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+               <li><a href="#login" id ="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+              <li><a href="#register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+              </ul>
+            <div class="col-sm-6 col-md-6 pull-right">
+                <form action="search.php" class="navbar-form" role="search" method="GET">
+                  <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="src" id="inputSearch">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit" name = "submit" value = "Search source code"><i class="glyphicon glyphicon-search"></i>Go!</button>
+                        </div>
+                    </div>
+                  </form>
+            </div>
+          </div>
+      </nav>
+    </nav>
+  </header>
 	
 </head>
 
@@ -36,7 +64,7 @@
     <!-- The JavaScript for a user to log in, contact between html -> JavaScript -> db class. -->
     <script src="js/login.js"></script>
     <!-- The JavaScript code for signing up. -->
-    <script type="text/javascript" src="js/register.js"></script>
+    <!-- <script type="text/javascript" src="js/register.js"></script> -->
     <script src="js/bootstrap.min.js"></script>
 </body>
 </html>

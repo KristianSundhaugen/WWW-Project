@@ -100,6 +100,35 @@ class db_class{
 		return true;
 	}
 	*/
+	public function loggingin($email, $password) {
+		try {
+
+			$stmt = $this->conn->prepare("SELECT * FROM users WHERE email=:email");
+        	$stmt->execute(array(":email"=>$email));
+        	$count = $stmt->rowCount();
+        	
+        	if($count==0){
+	            
+	            $stmt = $this->conn->prepare("INSERT INTO users(firstname, lastname, email, pwd, joining_date) VALUES(:firstname, :lastname, :email, :pwd, :jdate)");
+	            $stmt->bindParam(":firstname",$firstname);
+	            $stmt->bindParam(":lastname",$lastname);
+	            $stmt->bindParam(":email",$email);
+	            $stmt->bindParam(":pwd",$password);
+	            $stmt->bindParam(":jdate",$joining_date);
+
+	            if($stmt->execute()) {
+	                echo "registered";
+	            } else {
+	                echo "Query could not execute !";
+	            }
+	        } else{
+	            echo "1"; //  not available
+	        }
+		}
+		catch(PDOException $e){
+	    	echo $e->getMessage();
+	    }
+	}
 	public function userExists($email) {
 
 		$sql = "SELECT * FROM users WHERE email = :email";

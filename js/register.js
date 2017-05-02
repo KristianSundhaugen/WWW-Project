@@ -1,5 +1,4 @@
-$('document').ready(function()
-{
+$('document').ready(function() {
     /* validation */
     $("#register-form").validate({
         rules:
@@ -45,6 +44,7 @@ $('document').ready(function()
     /* validation */
 
     /* form submit */
+    
     function submitForm()
     {
         var data = $("#register-form").serialize();
@@ -77,7 +77,7 @@ $('document').ready(function()
                 {
 
                     $("#btn-submit").html('Signing Up');
-                    window.location.href = "#non_member";
+                    window.location.href = '#non_member';
 
                 }
                 else{
@@ -96,5 +96,4 @@ $('document').ready(function()
         return false;
     }
     /* form submit */
-
 });

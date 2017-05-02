@@ -50,7 +50,7 @@
 	  	 }
   	 });
   }
-
+  
   // Sets the "active" class on the active navigation link.
   function setActiveLink(fragmentId){
     $("#navbar a").each(function (i, linkElement) {
@@ -63,7 +63,7 @@
       }
     });
   }
-
+  
   // Updates dynamic content based on the fragment identifier.
   function navigate(){
 
@@ -81,18 +81,17 @@
     });
   
     // Toggle the "active" class on the link currently navigated to.
-    setActiveLink(fragmentId);
+    //setActiveLink(fragmentId);
   }
 
-    
-
   // If no fragment identifier is provided,
+  
   if(!location.hash) {
 
     // default to #home.
     location.hash = "#non_member";
   }
-
+  
   // Navigate once to the initial fragment identifier.
   navigate();
 
@@ -100,8 +99,6 @@
   $(window).bind('hashchange', navigate);
 
 }());
-
-
 
 /* $(document).ready(function(){
 	//Viser rett nettside i forhold til brukerrettigheter

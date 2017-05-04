@@ -146,9 +146,11 @@ class db_class{
 	}
 
 
-	public function upload($bid, $name, $size, $type, $tmp) {
-		$path="c:/xampp/htdocs/prosjekt2/Uploads/videos";
+	public function upload($bid, $name, $size, $type) {
+		//$path="c:/xampp/htdocs/prosjekt2/Uploads/videos" . $name;
 		
+		
+
 		$stmt = $this->conn->prepare("INSERT INTO video(bid, name, size, type) VALUES(:userbid, :fileName, :fileSize, :fileType)");
 		$stmt->bindparam(":userbid", $bid);
 		$stmt->bindparam(":fileName", $name);
@@ -156,15 +158,11 @@ class db_class{
 		$stmt->bindparam(":fileType", $type);
 
 		$stmt->execute();
-		//	$video_id = $this->conn->lastInsertId();
-			// move_uploaded_file($tmp, $path.$tmp);
-		//	echo "Query could not execute !";
+		//	$video_id = $this->conn->lastInsertId();			
+		
+		echo "Uploaded";
 			
-		//} else {
-			
-			move_uploaded_file($tmp, $path.$name);
-			echo "Uploaded";
-		//}
+		
 	}
 }
 

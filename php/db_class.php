@@ -2,8 +2,6 @@
 //require database serverens sin informasjon
 require 'config.php';
 
-$response = array();
-
 class db_class{
 	//database klassens elementer
 	public $host = db_host;

@@ -73,7 +73,6 @@ class db_class{
 					echo "Logged in";		
 				//  echo '<script>alert("Successfully login!")</script>';
 				//	echo '<script>window.location = "#member"</script>';
-					// header("Location: #member");
 				} else {
 					echo "Invalid username or password";				
 				//	echo '<script>alert("Invalid username or password")</script>';
@@ -104,11 +103,6 @@ class db_class{
 	}
 	*/
 
-	public function upload() {
-		
-
-	}
-
 	//funksjon for å vise brukernes data og rettigheter for admins/teachers
 	public function admin_table() {
 		$data = array();	//Hjelpearray for å lagre verdier
@@ -135,6 +129,27 @@ class db_class{
 		$stmt = $this->conn->prepare($sql);
 		$stmt->bindParam(":id", $id);
 		$stmt->execute();
+	}
+
+	public function upload($bid, $name, $size, $type, $tmp) {
+		$path="c:/xampp/htdocs/prosjekt2/Uploads/videos";
+		
+		$stmt = $this->conn->prepare("INSERT INTO video(bid, name, size, type) VALUES(:userbid, :fileName, :fileSize, :fileType)");
+		$stmt->bindparam(":userbid", $bid);
+		$stmt->bindparam(":fileName", $name);
+		$stmt->bindparam(":fileSize", $size);
+		$stmt->bindparam(":fileType", $type);
+
+		$stmt->execute();
+		//	$video_id = $this->conn->lastInsertId();
+			// move_uploaded_file($tmp, $path.$tmp);
+		//	echo "Query could not execute !";
+			
+		//} else {
+			
+			move_uploaded_file($tmp, $path.$name);
+			echo "Uploaded";
+		//}
 	}
 }
 

@@ -14,7 +14,7 @@ include "c:/xampp/htdocs/prosjekt2/php/db_class.php";
         $userbid = $_SESSION["bid"];
         
         $tmpName = rand() . "." . $extension;
-        $path="c:/xampp/htdocs/prosjekt2/Uploads/videos/" . $fileName;
+        $path="c:/xampp/htdocs/prosjekt2/html/Uploads/videos/" . $fileName;
         move_uploaded_file($_FILES["videoFile"]["tmp_name"], $path);
         $upload_file = $conn->upload($userbid, $fileName, $fileSize, $fileType);
 	} else {

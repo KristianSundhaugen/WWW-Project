@@ -55,11 +55,11 @@ $(document).ready(function(){
                     }
                     if(k==="name") {
                             $("#display_table >tbody >tr:last").append(
-                                $("<video id='myvideo' height='300' width='700' controls><source src='html/Uploads/videos/" + v +"' type='video/mp4'></video>")
-                            );                             
+                        $('<td><video id="myvideo" height="300" width="700" controls><source src="html/Uploads/videos/' + v +'" type="video/mp4"> Your Browser does not support the video tag.</video></td>'));                               
                     }
                 });
             });
         }
     });
 });
+

@@ -35,7 +35,7 @@ class db_class{
 
 			$stmt = $this->conn->prepare("SELECT * FROM users WHERE email=:email");
         	$stmt->execute(array(":email"=>$email));
-        	$count = $stmt->rowCount();
+        	$count = $stmt->rowCount();		
         
 	        if($count==0){
 	            
@@ -52,7 +52,7 @@ class db_class{
 	                echo "Query could not execute !";
 	            }
 	        } else{
-	            echo "1"; //  not available
+	            echo "1"; //  finnes ikke
 	        }
 		}
 		catch(PDOException $e){
@@ -102,49 +102,34 @@ class db_class{
 		return true;
 	}
 	*/
-	public function loggingin($email, $password) {
-		try {
 
-			$stmt = $this->conn->prepare("SELECT * FROM users WHERE email=:email");
-        	$stmt->execute(array(":email"=>$email));
-        	$count = $stmt->rowCount();
-        	
-        	if($count==0){
-	            
-	            $stmt = $this->conn->prepare("INSERT INTO users(firstname, lastname, email, pwd, joining_date) VALUES(:firstname, :lastname, :email, :pwd, :jdate)");
-	            $stmt->bindParam(":firstname",$firstname);
-	            $stmt->bindParam(":lastname",$lastname);
-	            $stmt->bindParam(":email",$email);
-	            $stmt->bindParam(":pwd",$password);
-	            $stmt->bindParam(":jdate",$joining_date);
-
-	            if($stmt->execute()) {
-	                echo "registered";
-	            } else {
-	                echo "Query could not execute !";
-	            }
-	        } else{
-	            echo "1"; //  not available
-	        }
+	//funksjon for å vise brukernes data og rettigheter for admins/teachers
+	public function admin_table() {
+		$data = array();	//Hjelpearray for å lagre verdier
+		$stmt = $this->conn->prepare("SELECT firstname, lastname, email, admin, bid FROM users");
+		$stmt->execute();
+		$row = $stmt->fetchALL(PDO::FETCH_ASSOC);
+		foreach ($row as $key => $value) {
+			$data[$key] = $value;
+			$result = json_encode($data);
 		}
-		catch(PDOException $e){
-	    	echo $e->getMessage();
-	    }
+		echo $result;
 	}
-	public function userExists($email) {
 
-		$sql = "SELECT * FROM users WHERE email = :email";
+	//Funksjon som gir en bruker admin rettigheter
+	public function edit_admin($id) {
+		$sql = "UPDATE users SET admin = 1 WHERE bid = :id";
 		$stmt = $this->conn->prepare($sql);
-		$stmt->execute(array(":email" => $email));
-		echo "hello ur in userexists";
-		if($stmt->fetch(PDO::FETCH_ASSOC)){
-			//brukeren finnes
-			return 1;
-		}else
-			//brukeren finnes ikke
-			return 0;
+		$stmt->bindParam(":id", $id);
+		$stmt->execute();
 	}
-
+	//Funksjon for å slette en bruker fra databasen
+	public function delete_user($id) {
+		$sql = "DELETE FROM users WHERE bid=:id";
+		$stmt = $this->conn->prepare($sql);
+		$stmt->bindParam(":id", $id);
+		$stmt->execute();
+	}
 
 	public function upload($bid, $name, $size, $type) {
 		//$path="c:/xampp/htdocs/prosjekt2/Uploads/videos" . $name;

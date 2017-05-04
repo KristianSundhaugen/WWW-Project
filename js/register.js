@@ -48,7 +48,7 @@ $('document').ready(function() {
     function submitForm()
     {
         var data = $("#register-form").serialize();
-
+        console.log(data);
         $.ajax({
 
             type : 'POST',

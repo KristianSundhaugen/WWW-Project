@@ -151,6 +151,50 @@ class db_class{
 			echo "Uploaded";
 		//}
 	}
+
+	//Funksjon for å opprette spilleliste for bruker
+	public function create_playlist($id, $playlist_name) {
+		
+		$stmt = $this->conn->prepare("SELECT pName FROM playlist WHERE pName = :name");
+		$stmt->bindParam(':name', $playlist_name);
+		$stmt->execute();
+		if($stmt->rowCount() > 0) {
+			echo 'playlist already exists';
+		} else {
+			$stmt = $this->conn->prepare("INSERT INTO playlist(pName, bid) VALUES (:playlist_name, :bid)");
+			$stmt->bindParam(':playlist_name', $playlist_name);
+			$stmt->bindParam(':bid', $id);
+			if($stmt->execute()) {
+				echo 'Successfully created playlist';
+			} else {
+				echo 'Query could not execute !';
+			}
+		}
+	}
+
+	//Funksjon for å displaye spillelister
+	public function display_playlist($id) {
+
+		$data = array();	//Hjelpearray for å lagre verdier
+		$stmt = $this->conn->prepare('SELECT pName, pId FROM playlist WHERE bid = :bid');
+		$stmt->bindParam(':bid', $id);
+		$stmt->execute();
+		$row = $stmt->fetchALL(PDO::FETCH_ASSOC);
+
+		foreach ($row as $key => $value) {
+			$data[$key] = $value;
+			$result = json_encode($data);
+		}
+		echo $result;
+	}
+
+	//Funksjon for å slette spilleliste
+	public function delete_playlist($id) {
+		$sql = "DELETE FROM playlist WHERE pId=:id";
+		$stmt = $this->conn->prepare($sql);
+		$stmt->bindParam(":id", $id);
+		$stmt->execute();
+	}
 }
 
 ?>

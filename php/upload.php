@@ -17,7 +17,6 @@ include "c:/xampp/htdocs/prosjekt2/php/db_class.php";
         $path="c:/xampp/htdocs/prosjekt2/Uploads/videos/" . $fileName;
         move_uploaded_file($_FILES["videoFile"]["tmp_name"], $path);
         $upload_file = $conn->upload($userbid, $fileName, $fileSize, $fileType);
-        
 	} else {
 		echo "<script>alert('Invalid File Formate')</script>";
 	}

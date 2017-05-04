@@ -40,6 +40,26 @@
 
           });
       });
+
+       $('#sub_submit_form').on('submit', function(e) {
+        e.preventDefault();
+         var formData = new FormData($(this)[0]);
+          $.ajax({
+            url: "php/uploadSub.php",
+            method: "post",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+
+             
+                alert("Uploaded");
+                window.location.href = "#member";
+               
+            }
+
+          });
+      });
 });
   
 

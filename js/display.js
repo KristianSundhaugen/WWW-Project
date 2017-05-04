@@ -55,16 +55,11 @@ $(document).ready(function(){
                     }
                     if(k==="name") {
                             $("#display_table >tbody >tr:last").append(
-                                  $('<td>').append( 
-                                    $('<video id="myvideo" height="300" width="700" controls>').append( 
-                                    $('<source src="/Uploads/videos/"' + v + '" type="video/mp4"> Your Browser does not support the video tag.').append(
-                                    $('</video>').append(
-                                    $('</td>'))))
-                                )
-                            );                             
+                        $('<td><video id="myvideo" height="300" width="700" controls><source src="html/Uploads/videos/' + v +'" type="video/mp4"> Your Browser does not support the video tag.</video></td>'));                               
                     }
                 });
             });
         }
     });
 });
+

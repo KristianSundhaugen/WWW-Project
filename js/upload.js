@@ -24,22 +24,38 @@
        $('#submit_form').on('submit', function(e) {
         e.preventDefault();
          var formData = new FormData($(this)[0]);
-         console.log(formData);
           $.ajax({
             url: "php/upload.php",
             method: "post",
             data: formData,
             processData: false,
             contentType: false,
-            success: function(svar) {
+            success: function(data) {
 
-              if(svar=="Uploaded") {
+             
+                alert("Uploaded");
                 window.location.href = "#member";
-              } else if (svar=="Query could not execute !") {
-                alert("Query could not execute !");
-              } else {
-                alert("Could not execute");
-              }
+               
+            }
+
+          });
+      });
+
+       $('#sub_submit_form').on('submit', function(e) {
+        e.preventDefault();
+         var formData = new FormData($(this)[0]);
+          $.ajax({
+            url: "php/uploadSub.php",
+            method: "post",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+
+             
+                alert("Uploaded");
+                window.location.href = "#member";
+               
             }
 
           });

@@ -2,7 +2,6 @@
 <?php
 session_start();
 include "c:/xampp/htdocs/prosjekt2/php/db_class.php";
-
  if($_FILES["videoFile"]["name"] != "") { 			
 	$extension = end(explode(".", $_FILES["videoFile"] ["name"]));
 	$allowed_type = array("ogg", "mp4", "webm");
@@ -13,10 +12,11 @@ include "c:/xampp/htdocs/prosjekt2/php/db_class.php";
         $fileSize = $_FILES["videoFile"]["size"];
         $fileType = $_FILES["videoFile"]["type"];
         $userbid = $_SESSION["bid"];
-
+        
         $tmpName = rand() . "." . $extension;
-        $upload_file = $conn->upload($userbid, $fileName, $fileSize, $fileType, $tmpName);
-
+        $path="c:/xampp/htdocs/prosjekt2/Uploads/videos/" . $fileName;
+        move_uploaded_file($_FILES["videoFile"]["tmp_name"], $path);
+        $upload_file = $conn->upload($userbid, $fileName, $fileSize, $fileType);
 	} else {
 		echo "<script>alert('Invalid File Formate')</script>";
 	}

@@ -131,9 +131,10 @@ class db_class{
 		$stmt->execute();
 	}
 
-	public function upload($bid, $name, $size, $type, $tmp) {
-		$path="c:/xampp/htdocs/prosjekt2/Uploads/videos";
+	public function upload($bid, $name, $size, $type) {
+		//$path="c:/xampp/htdocs/prosjekt2/Uploads/videos" . $name;
 		
+
 		$stmt = $this->conn->prepare("INSERT INTO video(bid, name, size, type) VALUES(:userbid, :fileName, :fileSize, :fileType)");
 		$stmt->bindparam(":userbid", $bid);
 		$stmt->bindparam(":fileName", $name);
@@ -141,15 +142,42 @@ class db_class{
 		$stmt->bindparam(":fileType", $type);
 
 		$stmt->execute();
-		//	$video_id = $this->conn->lastInsertId();
-			// move_uploaded_file($tmp, $path.$tmp);
-		//	echo "Query could not execute !";
+		// $_SESSION['video_id'] = $stmt->lastInsertId();			
+		
+		echo "Uploaded";
 			
-		//} else {
+		
+	}
+
+	public function uploadSub($name, $type, $size, $data) {
+		$stmt = $this->conn->prepare("SELECT * FROM video WHERE name=:name");
+        	$stmt->execute(array(":name"=>$name));
+        	 if($video_id = $stmt->fetch(PDO::FETCH_ASSOC))
+        	 	$vid = $video_id['vid']; 
+					$stmt = $this->conn->prepare("INSERT INTO subtitles(subName, subType, subSize, vid, data) VALUES(:subName, :subType, :subSize, :video_id, :data)");
+					$stmt->bindparam(":subName", $name);	
+					$stmt->bindparam(":subType", $type);
+					$stmt->bindparam(":subSize", $size);
+					$stmt->bindparam(":video_id", $vid);
+					$stmt->bindparam(":data", $data);
+					
+
+					$stmt->execute();
 			
-			move_uploaded_file($tmp, $path.$name);
-			echo "Uploaded";
-		//}
+	}
+
+	public function display() {
+
+			$data = array();	//Hjelpearray for å lagre verdier
+		$stmt = $this->conn->prepare("SELECT name, size, type, vid, bid FROM video");
+		$stmt->execute();
+		$row = $stmt->fetchALL(PDO::FETCH_ASSOC);
+		foreach ($row as $key => $value) {
+			$data[$key] = $value;
+			$result = json_encode($data);
+			
+		}
+		echo $result;
 	}
 
 	//Funksjon for å opprette spilleliste for bruker

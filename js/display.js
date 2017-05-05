@@ -55,7 +55,20 @@ $(document).ready(function(){
                     }
                     if(k==="name") {
                             $("#display_table >tbody >tr:last").append(
-                        $('<td><video id="myvideo" height="300" width="700" controls><source src="html/Uploads/videos/' + v +'" type="video/mp4"> Your Browser does not support the video tag.</video></td>'));                               
+                        $('<td><video id="myvideo" height="300" width="700" controls><source src="html/Uploads/videos/' + v +'" type="video/mp4"> Your Browser does not support the video tag.</video></td>'))
+                        .append('<div id="captionTrigger"><button id="startButton" onclick="SubEditController.init(); SubEditController.startCaption();">Edit</button></div>')
+                        .append('<textarea style="width:200px; height:250px; display: none; font-family: courier" id="vtt_out"></textarea>')
+                        .append('<div><input id="captionText" style="display: none;"/>')
+                        .append('<button id="playButton" style="display: none;" onclick="SubEditController.startVideo()">Play</button>')  
+                        .append('<button id="okButton" style="display: none;" onclick="SubEditController.endCaption()">Add</button>')   
+                        .append('<button id="pauseButton" style="display: none;" onclick="SubEditController.startCaption()">Pause</button>') 
+                        .append('<button id="deleteButton" style="display: none;" onclick="SubEditController.deleteCaption()">Delete</button>')
+                        .append('<button id="cancelButton" style="display: none;" onclick="SubEditController.cancelCaption()">Cancel</button>')
+                        .append('<button id="saveButton" style="display: none;" onclick="SubEditController.saveTextAsFile()">Save</button>')
+                        .append('<button id="helpButton" style="display: none;" onclick="SubEditController.helpText()">?</button>')
+                        .append('<button id="hideHelpButton" style="display: none;" onclick="SubEditController.hideEditingInstructions()">OK</button>')
+                        .append('<p id="editingInstructions">')
+                        .append('</div></div>');                      
                     }
                 });
             });

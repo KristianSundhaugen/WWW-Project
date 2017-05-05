@@ -223,6 +223,23 @@ class db_class{
 		$stmt->bindParam(":id", $id);
 		$stmt->execute();
 	}
+
+	public function my_videos($id) {
+			$data = array();	//Hjelpearray for å lagre verdier
+		$stmt = $this->conn->prepare("SELECT * FROM video WHERE bid = :bid");
+		$stmt->bindParam(':bid', $id);
+		$stmt->execute();
+		$row = $stmt->fetchALL(PDO::FETCH_ASSOC);
+		foreach ($row as $key => $value) {
+			$data[$key] = $value;
+			$result = json_encode($data);
+			
+		}
+		echo $result;
+	}
+	
+
 }
+
 
 ?>

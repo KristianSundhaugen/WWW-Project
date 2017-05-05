@@ -35,7 +35,7 @@ class db_class {
         	$stmt->execute(array(":email"=>$email));
         	$count = $stmt->rowCount();		
         
-	        if($count==0){
+	        if($count==0){ // sjekker om email finnes fra før
 	            
 	            $stmt = $this->conn->prepare("INSERT INTO users(firstname, lastname, email, pwd, joining_date) VALUES(:firstname, :lastname, :email, :pwd, :jdate)");
 	            $stmt->bindParam(":firstname",$firstname);
@@ -164,7 +164,7 @@ class db_class {
 			
 	}
 
-	public function display() {
+	public function display() { // for display av videoer på fremsidene
 
 			$data = array();	//Hjelpearray for å lagre verdier
 		$stmt = $this->conn->prepare("SELECT name, size, type, vid, bid FROM video");
@@ -233,9 +233,10 @@ class db_class {
 		
 
 	}
-	public function my_videos($id) {
+
+	public function my_videos($id) { // For display av videoer til en bestemt bruker
 		$data = array();	//Hjelpearray for å lagre verdier
-		$stmt = $this->conn->prepare("SELECT name, type, size, bid, vid FROM video WHERE bid = :bid");
+		$stmt = $this->conn->prepare("SELECT name, type, size, vid, bid  FROM video WHERE bid = :bid");
 		$stmt->bindParam(':bid', $id);
 		$stmt->execute();
 		$row = $stmt->fetchALL(PDO::FETCH_ASSOC);
@@ -246,8 +247,10 @@ class db_class {
 		}
 		echo $result;
 	}
+
 	//Funksjon for å slette video fra mine videor
 	public function delete_video($id, $vid) {
+		
 		$sql = "DELETE FROM video WHERE bid = :id && vid = :vid";
 		$stmt = $this->conn->prepare($sql);
 		$stmt->bindParam(":id", $id);

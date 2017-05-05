@@ -1,10 +1,10 @@
-$('document').ready(function() {
+$('document').ready(function() { // Når scriptet til tilkaldt
 	/* validation */
-    $("#playlist-form").validate({
+    $("#playlist-form").validate({ // valider det brukeren skriver inn
         rules:
         {         
             playlist: {
-                required: true
+                required: true // feltet kan ikke stå tomt
             },
         },
         messages:
@@ -13,7 +13,7 @@ $('document').ready(function() {
                 required: "Provide a Playlist name"
             }
         },
-        submitHandler: createPlaylist
+        submitHandler: createPlaylist // starter createPlaylist funksjonen
     });
     /* validation */
   /* form submit */

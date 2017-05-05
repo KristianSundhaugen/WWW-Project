@@ -221,6 +221,18 @@ class db_class{
 		$stmt->bindParam(":id", $id);
 		$stmt->execute();
 	}
+
+	//Funksjon for å legge til video i spilleliste
+	public function add_video_to_playlist($id, $vid, $pid) {
+
+		$stmt = $this->conn->prepare("INSERT INTO videosinplaylist (pId, vid, bid) VALUES (:pid, :vid, :bid)");
+		$stmt->bindParam(":pid", $pid);
+		$stmt->bindParam(":vid", $vid);
+		$stmt->bindParam(":bid", $id);
+		if($stmt->execute()){
+			echo "success";
+		}
+	}
 }
 
 ?>

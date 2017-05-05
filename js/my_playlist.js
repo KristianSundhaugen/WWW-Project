@@ -82,6 +82,10 @@ $('document').ready(function() {
                         $("#playlist_table >tbody >tr:last").append(
                            $("<td><input type='button' id='" + v + "' value='delete playlist' class='delete-button'/></td>")
                         );
+                        if(localStorage.getItem('vid')) {   //Hvis det er medsendt en video
+                            $("#playlist_table >tbody >tr:last").append(
+                            $("<td><input type='button' id='" + v + "' value='add to playlist' class='add-button'/></td>"));
+                        }
                     }
                 });
             });
@@ -90,7 +94,6 @@ $('document').ready(function() {
     //Funksjon for knappen enter
     $("#playlist_table").on("click", ".enter-button", function(event) {
         var id = $(this).attr('id');
-        console.log(id);
         localStorage.setItem('pid', id);     //Lagrer spilleliste iden slik at den kan brukes etter pageload
         window.location.href = "#playlist";
     });
@@ -105,6 +108,25 @@ $('document').ready(function() {
             success: function (data) {
                 window.location.href = "#member";
             }
+        });
+    });
+    //Funksjon for å legge til video i spilleliste
+    $("#playlist_table").on("click", ".add-button", function(event) {
+        var pid = $(this).attr('id');
+        var vid = localStorage.getItem('vid');
+        console.log(pid);
+        console.log(vid);
+        $.ajax({
+            url: 'php/add_to_playlist.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {'pid': pid, 'vid': vid},
+            success: function (data) {
+                localStorage.removeItem('vid');
+                localStorage.removeItem('pid');
+                window.location.href = "#member";
+            }
+
         });
     });
 });

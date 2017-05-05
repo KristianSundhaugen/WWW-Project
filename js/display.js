@@ -50,7 +50,7 @@ $(document).ready(function(){
                             $("<td><input type='button' id='" + v + "' value='Subtitles' class='sub-button'/></td>")
                         );
                         $("#display_table >tbody >tr:last").append(
-                           $("<td><input type='button' id='" + v + "' value='delete' class='delete-button'/></td>")
+                           $("<td><input type='button' id='" + v + "' value='add to playlist' class='add-button'/></td>")
                         );
                     }
                     if(k==="name") {
@@ -60,6 +60,13 @@ $(document).ready(function(){
                 });
             });
         }
+    });
+    //funksjon for å legge til video i spilleliste
+    $("#display_table").on("click", ".add-button", function(event) {
+        var id = $(this).attr('id');
+        console.log(id);
+        localStorage.setItem('vid', id);     //Lagrer videons id slik at den kan brukes etter pageload
+        window.location.href = "#my_playlists";
     });
 });
 

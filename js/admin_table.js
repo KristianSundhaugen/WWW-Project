@@ -1,15 +1,15 @@
 $(document).ready(function(){
     //Displayer hele user lista for adminer/teachere
     $.ajax({
-        url:'php/admin_table.php',
-        type:'POST',
-        success:function(data){
-            var result = $.parseJSON(data);
-            $.each(result, function(key, value){
+        url:'php/admin_table.php', // Sender all informasjon fra admin_table.html til admin_table.php
+        type:'POST', // Bruker type POST
+        success:function(data){ // På success, hent return data fra php filene.
+            var result = $.parseJSON(data); // Henter inn som JSON
+            $.each(result, function(key, value){ // En foreach løkke, som henter inn 2 verdier
                 $.each(value, function(k, v){
-                    if(k === "firstname"){
-                        $("#admin_table >tbody:last").append(
-                            $('<tr>').append(
+                    if(k === "firstname"){ // om key = firstname så er value = (navnet på brukeren).
+                        $("#admin_table >tbody:last").append( // Legger inn dataen i #admin_table (på admin_table.html)
+                            $('<tr>').append( // Setter opp hvordan det skal vises på html siden.
                                 $('<td>').append(v)
                                 .append(
                                     $('</td>').append(
@@ -52,8 +52,8 @@ $(document).ready(function(){
                             )
                         );
                     }
-                    if(k === "bid"){
-                        $("#admin_table >tbody >tr:last").append(
+                    if(k === "bid"){ // hvis key === brukerId så skal brukeren ha muligheten til å slette eller 
+                        $("#admin_table >tbody >tr:last").append( // endre på brukeren ut i fra hvilken ID han har.
                             $("<td><input type='button' id='" + v + "' value='edit' class='edit-button'/></td>")
                         );
                         $("#admin_table >tbody >tr:last").append(

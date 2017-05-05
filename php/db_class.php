@@ -35,7 +35,7 @@ class db_class{
         	$stmt->execute(array(":email"=>$email));
         	$count = $stmt->rowCount();		
         
-	        if($count==0){
+	        if($count==0){ // sjekker om email finnes fra før
 	            
 	            $stmt = $this->conn->prepare("INSERT INTO users(firstname, lastname, email, pwd, joining_date) VALUES(:firstname, :lastname, :email, :pwd, :jdate)");
 	            $stmt->bindParam(":firstname",$firstname);
@@ -164,7 +164,7 @@ class db_class{
 			
 	}
 
-	public function display() {
+	public function display() { // for display av videoer på fremsidene
 
 			$data = array();	//Hjelpearray for å lagre verdier
 		$stmt = $this->conn->prepare("SELECT name, size, type, vid, bid FROM video");
@@ -221,6 +221,23 @@ class db_class{
 		$stmt->bindParam(":id", $id);
 		$stmt->execute();
 	}
+
+	public function my_videos($id) { // For display av videoer til en bestemt bruker
+			$data = array();	//Hjelpearray for å lagre verdier
+		$stmt = $this->conn->prepare("SELECT * FROM video WHERE bid = :bid");
+		$stmt->bindParam(':bid', $id);
+		$stmt->execute();
+		$row = $stmt->fetchALL(PDO::FETCH_ASSOC);
+		foreach ($row as $key => $value) {
+			$data[$key] = $value;
+			$result = json_encode($data);
+			
+		}
+		echo $result;
+	}
+	
+
 }
+
 
 ?>

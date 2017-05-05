@@ -1,14 +1,9 @@
 <?php
 require_once "db_class.php";
 session_start();
-
 if(isset($_SESSION['bid'])) {
 	$conn = new db_class();
-	$id = $_SESSION['bid'];
 	$pid = $_POST['pid'];
-	$vid = $_POST['vid'];
-
-	$conn->add_video_to_playlist($pid, $vid, $id);
-} 
-
-?>
+	$id = $_SESSION['bid'];
+	$conn->display_videos_in_playlist($pid, $id);
+}

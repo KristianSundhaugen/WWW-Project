@@ -2,7 +2,7 @@
 //require database serverens sin informasjon
 require 'config.php';
 
-class db_class{
+class db_class {
 	//database klassens elementer
 	public $host = db_host;
 	public $user = db_user;
@@ -223,15 +223,66 @@ class db_class{
 	}
 
 	//Funksjon for å legge til video i spilleliste
-	public function add_video_to_playlist($id, $vid, $pid) {
+	public function add_video_to_playlist($pid, $vid, $id) {
 
-		$stmt = $this->conn->prepare("INSERT INTO videosinplaylist (pId, vid, bid) VALUES (:pid, :vid, :bid)");
+		$stmt = $this->conn->prepare("INSERT INTO videosinplaylist (pId, vid, bid) VALUES ( :pid , :vid, :bid)");
 		$stmt->bindParam(":pid", $pid);
 		$stmt->bindParam(":vid", $vid);
 		$stmt->bindParam(":bid", $id);
-		if($stmt->execute()){
-			echo "success";
+		$stmt->execute();
+		
+
+	}
+	public function my_videos($id) {
+		$data = array();	//Hjelpearray for å lagre verdier
+		$stmt = $this->conn->prepare("SELECT name, type, size, bid, vid FROM video WHERE bid = :bid");
+		$stmt->bindParam(':bid', $id);
+		$stmt->execute();
+		$row = $stmt->fetchALL(PDO::FETCH_ASSOC);
+		foreach ($row as $key => $value) {
+			$data[$key] = $value;
+			$result = json_encode($data);
+			
 		}
+		echo $result;
+	}
+	//Funksjon for å slette video fra mine videor
+	public function delete_video($id, $vid) {
+		$sql = "DELETE FROM video WHERE bid = :id && vid = :vid";
+		$stmt = $this->conn->prepare($sql);
+		$stmt->bindParam(":id", $id);
+		$stmt->bindParam(":vid", $vid);
+		$stmt->execute();
+	}
+	//Funksjon for å vise videor som ligger i spillelister
+	public function display_videos_in_playlist($pid, $id) {
+		$data = array();	//Hjelpearray for å lagre verdier
+
+		$sql = "SELECT video.name, video.type, video.size, video.vid FROM videosinplaylist JOIN playlist, video, users WHERE (videosinplaylist.pId = :pid AND playlist.pId = :pid) AND (videosinplaylist.bid = :id AND playlist.bid = :id AND users.bid = :id) AND (videosinplaylist.vid = video.vid)";
+		$stmt = $this->conn->prepare($sql);
+		$stmt->bindParam(":pid", $pid);
+		$stmt->bindParam(":id", $id);
+		$stmt->execute();
+
+		$row = $stmt->fetchALL(PDO::FETCH_ASSOC);
+		foreach ($row as $key => $value) {
+			$data[$key] = $value;
+			$result = json_encode($data);
+		}
+		echo $result;
+	}
+	//Funksjon slett video fra spilleliste
+	public function delete_video_from_playlist($id, $vid, $pid) {
+		/*
+		SQL query funker ikke da den returner for mange rader.
+		
+		$sql = 'DELETE FROM videosinplaylist JOIN playlist, video, users WHERE (videosinplaylist.pId = :pid AND playlist.pId = :pid) AND (videosinplaylist.bid = :id AND playlist.bid = :id AND users.bid = :id) AND (videosinplaylist.vid = :vid AND video.vid = :vid)'
+		$stmt = $this->conn->prepare($sql);
+		$stmt->bindParam(":pid", $pid);
+		$stmt->bindParam(":id", $id);
+		$stmt->bindParam(":vid", $vid)
+		$stmt->execute();
+		*/
 	}
 }
 

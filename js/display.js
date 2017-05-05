@@ -18,8 +18,8 @@ $(document).ready(function(){
                                 )
                             )
                         );
-                            
                     }
+                    /*
                     if(k === "type"){
                         var temp = v; // For bruk i video show, trenger fileextensionvalue (mp4, ogg osv..)
                         $("#display_table >tbody >tr:last").append(
@@ -45,10 +45,13 @@ $(document).ready(function(){
                             )
                         );
                     }
+                    */
                     if(k === "vid"){
+                        /*
                         $("#display_table >tbody >tr:last").append(
-                            $("<td><input type='button' id='" + v + "' value='Subtitles' class='sub-button'/></td>")
+                            $("<td><input type='button' id='" + v + "' value='delete' class='delete-button'/></td>")
                         );
+                        */
                         $("#display_table >tbody >tr:last").append(
                            $("<td><input type='button' id='" + v + "' value='add to playlist' class='add-button'/></td>")
                         );

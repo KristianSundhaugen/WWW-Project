@@ -53,7 +53,9 @@ $(document).ready(function(){
                            $("<td><input type='button' id='" + v + "' value='delete' class='delete-button'/></td>")
                         );
                     }
-                    if(k==="name") { // display av selve videoen på non_member og member.
+                    // display av selve videoen på non_member og member.
+                    //Samt alle knappene, tekstfelt og tekstarea for editering av subtitles
+                    if(k==="name") { 
                             $("#display_table >tbody >tr:last").append(
                         $('<td><video id="myvideo" height="300" width="700" controls><source src="html/Uploads/videos/' + v +'" type="video/mp4"> Your Browser does not support the video tag.</video></td>'))
                         .append('<div id="captionTrigger"><button id="startButton" onclick="SubEditController.init(); SubEditController.startCaption();">Edit</button></div>')
